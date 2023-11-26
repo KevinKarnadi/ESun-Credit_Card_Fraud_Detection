@@ -2,10 +2,6 @@
 
 Submission for AI CUP 2023 E.Sun Artificial Intelligence Open Challenge - Credit Card Fraud Detection
 
-## IMPORTANT
-
-Please put the datasets ('training.csv', 'public_processed.csv', 'public.csv', and 'private_1_processed.csv') into the ```data/``` directory.
-
 ## Method Overview
 
 1. Data Preprocessing: Cleaning and preprocessing the provided data to prepare it for model training.
@@ -34,3 +30,8 @@ $ pip install -r requirements.txt
 $ python main.py
 ```
 Use ```python -W "ignore" main.py``` to ignore warnings
+
+## Important Notes
+
+- Please put the datasets ('training.csv', 'public_processed.csv', 'public.csv', and 'private_1_processed.csv') into the ```data/``` directory.
+- In our code, the provided training dataset will be referred to as the "training data", the public leaderboard dataset will be referred to as the "validation data", and the private leaderboard dataset will be reffered to as the "testing data".
