@@ -2,6 +2,10 @@
 
 Submission for AI CUP 2023 E.Sun Artificial Intelligence Open Challenge - Credit Card Fraud Detection
 
+## IMPORTANT
+
+Please put the datasets ('training.csv', 'public_processed.csv', 'public.csv', and 'private_1_processed.csv') into the ```data/``` directory.
+
 ## Method Overview
 
 1. Data Preprocessing: Cleaning and preprocessing the provided data to prepare it for model training.
@@ -13,12 +17,12 @@ Submission for AI CUP 2023 E.Sun Artificial Intelligence Open Challenge - Credit
 
 ## File Content
 
-- Model/
-	- model.py: Stores code for hyparameter tuning by GridSearchCV, and code for training and predicting using the models.
-- Preprocess/
-	- preprocess.py: Stores code for data cleaning and preprocessing. Also contains code for feature engineering.
-- requirements.txt: Required packages for the code.
-- main.py: Execute this file to perform the entire complete process.
+- ```Model/```
+	- ```model.py```: Stores code for hyparameter tuning by GridSearchCV, and code for training and predicting using the models.
+- ```Preprocess/```
+	- ```preprocess.py```: Stores code for data cleaning and preprocessing. Also contains code for feature engineering.
+- ```requirements.txt```: Required packages for the code.
+- ```main.py```: Execute this file to perform the entire complete process.
 
  ## Implementation Process Example
 
@@ -29,4 +33,4 @@ $ pip install -r requirements.txt
 # Run code
 $ python main.py
 ```
-Use "python -W "ignore" main.py" to ignore warnings
+Use ```python -W "ignore" main.py``` to ignore warnings
