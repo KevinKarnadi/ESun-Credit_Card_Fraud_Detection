@@ -11,22 +11,25 @@ Prepare data to be used for training and predicting using the models.
 - Split features and labels
 
 ### tune_parameters()
-For the three different models: XGBoost, LightGBM, and CatBoost, perform hyperparameter tuning using an exhaustive grid search to find the best combination of parameters for each model. The parameters that is tried to optimize for here are the n_trees, learning rate, max depth (which increases the complexity of the model), and the lambda parameter (which is for regularization)
+Set the ```perform_tuning``` variable in ```main.py``` to ```True``` if you want to perform hyperparameter tuning.
+
+For the three different models: XGBoost, LightGBM, and CatBoost, perform hyperparameter tuning using an exhaustive grid search to find the best combination of parameters for each model. The parameters that is tried to optimize for here are the ```n_trees```, ```learning rate```, ```max depth``` (which increases the complexity of the model), and the ```lambda``` parameter (which is for regularization)
+
 - XGBoost parameters searched over:
-  - n_estimators: 100, 300, 600
-  - learning_rate: 0.05, 0.1, 0.2, 0.3
-  - max_depth: 4, 6, 8
-  - reg_lambda: 0, 10, 20
+  - ```n_estimators```: 100, 300, 600
+  - ```learning_rate```: 0.05, 0.1, 0.2, 0.3
+  - ```max_depth```: 4, 6, 8
+  - ```reg_lambda```: 0, 10, 20
 - LightGBM parameters searched over:
-  - n_estimators: 200, 400, 600
-  - learning_rate: 0.05, 0.1, 0.2
-  - max_depth: 6, 8
-  - reg_lambda: 0, 10, 20
+  - ```n_estimators```: 200, 400, 600
+  - ```learning_rate```: 0.05, 0.1, 0.2
+  - ```max_depth```: 6, 8
+  - ```reg_lambda```: 0, 10, 20
 - CatBoost parameters searched over:
-  - iterations: 600, 800, 1000
-  - learning_rate: 0.01, 0.04, 0.1
-  - depth: 4, 6, 8
-  - l2_leaf_reg: 0, 10, 20
+  - ```iterations```: 600, 800, 1000
+  - ```learning_rate```: 0.01, 0.04, 0.1
+  - ```depth```: 4, 6, 8
+  - ```l2_leaf_reg```: 0, 10, 20
 
 The parameters are tuned using a 20% subset of the training data, and the final performance of the model will be assessed using the holdout validation data which contains the public leaderboard data.
 
@@ -42,23 +45,23 @@ Make the final ensembled prediction by performing max voting on the predictions 
 ## Parameter Settings
 
 ### XGBoost
-- reg_lambda: 20
-- learning_rate: 0.05
-- max_depth: 4
-- n_estimators: 600
+- ```reg_lambda```: 20
+- ```learning_rate```: 0.05
+- ```max_depth```: 4
+- ```n_estimators```: 600
 
 ### LightGBM
-- n_estimators: 400
-- learning_rate: 0.05
-- max_depth: 6
-- reg_lambda: 20
-- num_leaves: 63
+- ```n_estimators```: 400
+- ```learning_rate```: 0.05
+- ```max_depth```: 6
+- ```reg_lambda```: 20
+- ```num_leaves```: 63
 
 ### CatBoost
-- depth: 8
-- iterations: 1000
-- l2_leaf_reg: 0
-- learning_rate: 0.04
-- boosting_type: 'Plain'
-- leaf_estimation_iterations: 1
-- one_hot_max_size: 254
+- ```depth```: 8
+- ```iterations```: 1000
+- ```l2_leaf_reg```: 0
+- ```learning_rate```: 0.04
+- ```boosting_type```: 'Plain'
+- ```leaf_estimation_iterations```: 1
+- ```one_hot_max_size```: 254
