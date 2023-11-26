@@ -7,6 +7,23 @@ from catboost import CatBoostClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedShuffleSplit
 
 def prepare_data(data, train_txkeys):
+
+    """
+    The `prepare_data` function is used to prepare the data for training and evaluation.
+
+    inputs:
+        data: The whole dataset (train, val, test)
+        train_txkeys: txkeys of the train dataset. Used to split the data into train and validation
+
+    outputs:
+        X_train: Features of the train dataset
+        y_train: Labels of the train dataset
+        X_val: Features of the validation dataset
+        y_val: Features of the validation dataset
+        X_test: Features of the test dataset
+        val_txkeys: txkeys of the validation dataset. Used later to make the final predictions
+        test_txkeys: txkeys of the test dataset. Used later to make the final predictions
+    """
     
     data_test = data[data['label'].isna()]
     data = data[~data['label'].isna()]
@@ -40,6 +57,21 @@ def prepare_data(data, train_txkeys):
 
 
 def prepare_data_cb(X_train, X_val, X_test):
+
+    """    
+    The `prepare_data_cb` function is used to prepare the data for training and evaluation specifically for the CatBoost model.
+
+    inputs:
+        X_train: Features of the train dataset
+        X_val: Features of the validation dataset
+        X_test: Features of the test dataset
+
+    outputs:
+        cat_cols: Categorical variables of the dataset. Used later for the CatBoost model
+        X_train_cb: Features of the train dataset, used for the CatBoost model
+        X_val_cb: Features of the validation dataset, used for the CatBoost model
+        X_test_cb: Features of the test dataset, used for the CatBoost model
+    """
     
     cat_cols = ['contp', 'etymd', 'mcc', 'stocn', 'scity', 'stscd', 'hcefg', 'csmcu']
 
@@ -75,6 +107,17 @@ def prepare_data_cb(X_train, X_val, X_test):
 
 
 def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
+
+    """
+    The `tune_parameters` function is used to tune the hyperparameters of the
+    three different models: XGBoost, LightGBM, and CatBoost, using GridSearch CV.
+
+    inputs:
+        X_train: Features of the train dataset
+        X_train_cb: Features of the train dataset (used for the CatBoost model)
+        y_train: Labels of the train dataset
+        cat_cols: Categorical variables of the dataset
+    """
     
     # XGBoost
     param_grid = {
@@ -143,6 +186,22 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
 
 def train(X_train, X_train_cb, y_train, cat_cols):
 
+    """    
+    The `train` function is used to train the three different models: XGBoost, LightGBM, and CatBoost
+    by fitting it to the dataset passed to the function argument.
+
+    inputs:
+        X_train: Features of the train dataset
+        X_train_cb: Features of the train dataset (used for the CatBoost model)
+        y_train: Labels of the train dataset
+        cat_cols: Categorical variables of the dataset
+        
+    outputs:
+        xgb_model: The XGBoost model instance
+        lgb_model: The LightGBM model instance
+        cb_model: The CatBoost model instance
+    """
+
     xgb_model = xgb.XGBClassifier(objective='binary:logistic', enable_categorical=True,
                                 reg_lambda=20,
                                 learning_rate=0.05,
@@ -175,6 +234,23 @@ def train(X_train, X_train_cb, y_train, cat_cols):
 
 def predict(xgb_model, lgb_model, cb_model, X, X_cb):
 
+    """    
+    The `predict` function is used to make predictions of the testing data
+    using the three different models: XGBoost, LightGBM, and CatBoost.
+
+    inputs:
+        xgb_model: The XGBoost model instance
+        lgb_model: The LightGBM model instance
+        cb_model: The CatBoost model instance
+        X: The data that will be used to perform predictions
+        X_cb: The data that will be used to perform predictions for CatBoost model
+
+    outputs:
+        y_pred_xgb: Predictions of the XGBoost model
+        y_pred_lgb: Predictions of the LightGBM model
+        y_pred_cb: Predictions of the CatBoost model
+    """
+
     y_pred_xgb = xgb_model.predict(X)
     y_pred_lgb = lgb_model.predict(X)
     y_pred_cb = cb_model.predict(X_cb)
@@ -183,6 +259,17 @@ def predict(xgb_model, lgb_model, cb_model, X, X_cb):
 
 
 def make_submission(val_txkeys, test_txkeys, y_pred_val_xgb, y_pred_test_xgb, y_pred_val_lgb, y_pred_test_lgb, y_pred_val_cb, y_pred_test_cb):
+
+    """    
+    The `make_submission` function is used to make the final ensembled prediction
+    by performing max voting on the predictions from XGBoost, LightGBM, and CatBoost.
+
+    inputs:
+        val_txkeys, test_txkeys: The txkeys of the validation and testing datasets
+        y_pred_val_xgb, y_pred_test_xgb: Validation and testing data predictions from XGBoost
+        y_pred_val_lgb, y_pred_test_lgb: Validation and testing data predictions from LightGBM
+        y_pred_val_cb, y_pred_test_cb: Validation and testing data predictions from CatBoost
+    """
 
     txkey_total = np.concatenate((val_txkeys, test_txkeys), axis=0)
 
