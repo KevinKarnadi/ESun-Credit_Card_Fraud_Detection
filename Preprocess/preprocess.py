@@ -2,6 +2,15 @@ import numpy as np
 import pandas as pd
 
 def load_data():
+     """
+    load and return train dataset, public dataset, and private dataset as a one merged dataset.
+    input: no input
+    output: 
+        data: the merged dataset (train, val, test)
+        train_txkeys: txkeys of the train dataset
+        val_txkeys: txkeys of the validation dataset
+        y_public: label of public data
+    """
     
     data_train = pd.read_csv('./data/training.csv')
     train_txkeys = np.unique(data_train['txkey'])
@@ -44,6 +53,13 @@ def load_data():
     return data, train_txkeys, val_txkeys, y_public
 
 def generate_others(data):
+    """
+    generate a new category for infrequent categories in the 'mcc' and 'scity' columns if their counts fall below a defined treshold. 
+    input: 
+        data: pandas dataset
+    output:
+        data: pandas dataset containing the updated categories
+    """
 
     threshold = 2000
 
@@ -63,6 +79,15 @@ def generate_others(data):
 
 
 def handle_missing(data, val_txkeys, y_public):
+    """
+    handle missing values in the given dataset
+    input:
+        data: pandas dataset
+        val_txkeys: txkeys of public dataset
+        y_public: label of public dataset
+    output: 
+        data: pandas dataset with imputed or removed missing values
+    """
 
     data_valtest = data[data['label'].isna()]
     data = data[~data['label'].isna()]
@@ -98,6 +123,13 @@ def handle_missing(data, val_txkeys, y_public):
 
 
 def generate_features(data):
+    """
+    perform feature engineering to create new features from the input dataset
+    input: 
+        data: pandas dataset
+    output: 
+        data: pandas dataset with additional new features
+    """
 
     data = data.sort_values(by = ['chid','cano','locdt','loctm']).reset_index(drop = True)
 
