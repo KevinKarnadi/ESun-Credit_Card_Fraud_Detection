@@ -47,8 +47,3 @@ New generated features are as follows:
 - 'number_of_unique_cards_owned': number of unique cards owned of a individual (chid)
 - 'number_of_mcc_per_cano': number of unique mcc associated with a card (cano)
 - 'mcc_frequency_per_cano': frequency of each mcc associated with a card (cano)
-
-## Additional Notes
-- Make sure to have the training.csv, public.csv, and private_1_processed.csv files in the same directory as preprocess.py.
-- The module also provides detailed comments within the code for better understanding of each step.
-
