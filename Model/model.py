@@ -5,6 +5,7 @@ import xgboost as xgb
 import lightgbm as lgb
 from catboost import CatBoostClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedShuffleSplit
+from sklearn.metrics import f1_score
 
 def prepare_data(data, train_txkeys):
 
@@ -106,7 +107,7 @@ def prepare_data_cb(X_train, X_val, X_test):
     return cat_cols, X_train_cb, X_val_cb, X_test_cb
 
 
-def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
+def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
 
     """
     The `tune_parameters` function is used to tune the hyperparameters of the
@@ -137,6 +138,9 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
     print("Best parameters for XGB Model:", optimal_params.best_params_)
     print("Score using the best parameters:", optimal_params.best_score_)
 
+    y_pred = optimal_params.predict(X_val)
+    print('Validation F1-Score =', f1_score(y_val, y_pred))
+
     # LightGBM
     param_grid = [
         {
@@ -165,6 +169,9 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
     print("Best parameters for LGB Model:", optimal_params.best_params_)
     print("Score using the best parameters:", optimal_params.best_score_)
 
+    y_pred = optimal_params.predict(X_val)
+    print('Validation F1-Score =', f1_score(y_val, y_pred))
+
     # CatBoost
     param_grid = {
         'iterations': [600, 800, 1000],
@@ -182,6 +189,9 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols):
 
     print("Best parameters for CB Model:", optimal_params.best_params_)
     print("Score using the best parameters:", optimal_params.best_score_)
+
+    y_pred = optimal_params.predict(X_val)
+    print('Validation F1-Score =', f1_score(y_val, y_pred))
 
 
 def train(X_train, X_train_cb, y_train, cat_cols):

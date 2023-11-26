@@ -36,7 +36,7 @@ cat_cols, X_train_cb, X_val_cb, X_test_cb = prepare_data_cb(X_train, X_val, X_te
 perform_tuning = False  # set to True if you want to perform hyperparameter tuning
 if perform_tuning == True:
     print('Performing Hyperparameter Tuning ...')
-    tune_parameters(X_train, X_train_cb, y_train, cat_cols)
+    tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val)
 
 
 # Train and Make Predictions
