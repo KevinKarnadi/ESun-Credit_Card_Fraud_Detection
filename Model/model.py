@@ -107,7 +107,7 @@ def prepare_data_cb(X_train, X_val, X_test):
     return cat_cols, X_train_cb, X_val_cb, X_test_cb
 
 
-def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
+def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, X_val_cb, y_val):
 
     """
     The `tune_parameters` function is used to tune the hyperparameters of the
@@ -122,10 +122,10 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
     
     # XGBoost
     param_grid = {
-        'n_estimators': [100, 300, 600],
-        'max_depth': [4, 6, 8],
-        'learning_rate': [0.05, 0.1, 0.2, 0.3],
-        'reg_lambda': [0, 10, 20],
+        'n_estimators': [10],
+        'max_depth': [4],
+        'learning_rate': [0.05],
+        'reg_lambda': [0],
     }
 
     optimal_params = GridSearchCV(estimator=xgb.XGBClassifier(objective='binary:logistic', enable_categorical=True),
@@ -146,17 +146,10 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
         {
         'max_depth': [6],
         'num_leaves': [2**6-1],
-        'n_estimators': [200, 400, 600],
-        'learning_rate': [0.05, 0.1, 0.2],
-        'reg_lambda': [0, 10, 20],
-        },
-        {
-        'max_depth': [8],
-        'num_leaves': [2**8-1],
-        'n_estimators': [200, 400, 600],
-        'learning_rate': [0.05, 0.1, 0.2],
-        'reg_lambda': [0, 10, 20],
-        },
+        'n_estimators': [10],
+        'learning_rate': [0.05],
+        'reg_lambda': [0],
+        }
     ]
 
     optimal_params = GridSearchCV(estimator=lgb.LGBMClassifier(objective='binary', verbosity=-1),
@@ -174,10 +167,10 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
 
     # CatBoost
     param_grid = {
-        'iterations': [600, 800, 1000],
-        'depth': [4, 6, 8],
-        'learning_rate': [0.01, 0.04, 0.1],
-        'l2_leaf_reg': [0, 10, 20]
+        'iterations': [10],
+        'depth': [4],
+        'learning_rate': [0.01],
+        'l2_leaf_reg': [0]
     }
 
     optimal_params = GridSearchCV(estimator=CatBoostClassifier(cat_features=cat_cols, boosting_type='Plain', leaf_estimation_iterations=1, one_hot_max_size=254, silent=True),
@@ -190,7 +183,7 @@ def tune_parameters(X_train, X_train_cb, y_train, cat_cols, X_val, y_val):
     print("Best parameters for CB Model:", optimal_params.best_params_)
     print("Score using the best parameters:", optimal_params.best_score_)
 
-    y_pred = optimal_params.predict(X_val)
+    y_pred = optimal_params.predict(X_val_cb)
     print('Validation F1-Score =', f1_score(y_val, y_pred))
 
 
